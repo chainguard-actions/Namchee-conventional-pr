@@ -8,6 +8,7 @@ Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at
 
 | Version | Tag | Upstream commit |
 |---------|-----|-----------------|
+| v0.15.3 | [`v0.15.3`](https://github.com/chainguard-actions/Namchee-conventional-pr/tree/v0.15.3) | [`8378fb2`](https://github.com/Namchee/conventional-pr/commit/8378fb29fcf8e0b18ce4f366ffd70483e5e9e8d8) |
 | v0.15.4 | [`v0.15.4`](https://github.com/chainguard-actions/Namchee-conventional-pr/tree/v0.15.4) | [`b31518c`](https://github.com/Namchee/conventional-pr/commit/b31518c34a4243c21484e3187abbbee4a44d0ec4) |
 
 ## Privacy
