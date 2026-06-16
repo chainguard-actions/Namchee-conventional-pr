@@ -1,0 +1,94 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "Namchee",
+      "name": "Cristopher",
+      "avatar_url": "https://avatars.githubusercontent.com/u/32661241?v=4",
+      "profile": "https://github.com/Namchee",
+      "contributions": [
+        "code",
+        "bug",
+        "doc",
+        "example",
+        "ideas"
+      ]
+    },
+    {
+      "login": "smutel",
+      "name": "Samuel Mutel",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12967891?v=4",
+      "profile": "https://github.com/smutel",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "BinToss",
+      "name": "Noah Sherwin",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7243190?v=4",
+      "profile": "https://github.com/BinToss",
+      "contributions": [
+        "bug",
+        "ideas"
+      ]
+    },
+    {
+      "login": "avorima",
+      "name": "Mario Valderrama",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15158349?v=4",
+      "profile": "https://github.com/avorima",
+      "contributions": [
+        "ideas"
+      ]
+    },
+    {
+      "login": "Th3S4mur41",
+      "name": "Michaël Vanderheyden",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5543595?v=4",
+      "profile": "https://th3s4mur41.me",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "berkon",
+      "name": "Bernd Konnerth",
+      "avatar_url": "https://avatars.githubusercontent.com/u/28842661?v=4",
+      "profile": "https://github.com/berkon",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "TheGoderGuy",
+      "name": "TheGoderGuy",
+      "avatar_url": "https://avatars.githubusercontent.com/u/26481335?v=4",
+      "profile": "https://github.com/TheGoderGuy",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Lapotor",
+      "name": "Lapotor",
+      "avatar_url": "https://avatars.githubusercontent.com/u/17144397?v=4",
+      "profile": "https://github.com/Lapotor",
+      "contributions": [
+        "ideas"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "conventional-pr",
+  "projectOwner": "Namchee",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true,
+  "commitType": "docs",
+  "commitConvention": "angular"
+}

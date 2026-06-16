@@ -1,0 +1,77 @@
+name: Conventional PR
+description: "Validates and enforces clean pull request style in your GitHub projects without hassle"
+author: "Cristopher Namchee"
+inputs:
+  access_token:
+    description: "GitHub access token"
+    required: true
+  close:
+    description: "Immediately close invalid pull request"
+    required: false
+    default: false
+  label:
+    description: "Invalid pull requests label"
+    required: false
+    default: ""
+  message:
+    description: "Extra message to be posted on validation failure"
+    required: false
+    default: ""
+  draft:
+    description: "Skip pull request validation if the pull request is a draft"
+    required: false
+    default: true
+  strict:
+    description: "Enforce validation rules to repository administrators"
+    required: false
+    default: true
+  bot:
+    description: "Skip pull request validation if the author is a bot"
+    required: false
+    default: true
+  title_pattern:
+    description: "Valid pull request title regex pattern in Perl syntax"
+    required: false
+    default: '([\w\-]+)(\([\w\-]+\))?!?: [\w\s:\-]+'
+  commit_pattern:
+    description: "Valid pull request commit message regex pattern in Perl syntax"
+    required: false
+    default: ""
+  branch_pattern:
+    description: "Valid pull request branch name regex pattern in Perl syntax"
+    required: false
+    default: ""
+  issue:
+    description: "Require all pull request to reference an existing issue"
+    required: false
+    default: true
+  body:
+    description: "Require all pull request to have a non-empty body"
+    required: false
+    default: true
+  maximum_changes:
+    description: "Limits file changes per pull request"
+    required: false
+    default: 0
+  ignored_users:
+    description: "GitHub usernames to be whitelisted from pull request validation"
+    required: false
+    default: ""
+  edit:
+    description: "Edit existing validation report instead of creating a new comment"
+    required: false
+    default: false
+  verbose:
+    describe: "Post validation report on every pull request validation flow"
+    required: false
+    default: false
+  timeout:
+    describe: "Timeout for API requests in seconds. Set to 0 for no timeout"
+    required: false
+    default: 5
+runs:
+  using: docker
+  image: "Dockerfile"
+branding:
+  icon: "compass"
+  color: "gray-dark"
