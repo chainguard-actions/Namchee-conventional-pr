@@ -1,0 +1,17 @@
+name: Check pull request semantics
+
+on:
+  pull_request_target:
+
+permissions: {}
+
+jobs:
+  cpr:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Check PR semantics
+        uses: Namchee/conventional-pr@130d7ab18df28e92ff803e37bfdf0600fb2a318e # master
+        with:
+          access_token: ${{ secrets.ACCESS_TOKEN }}

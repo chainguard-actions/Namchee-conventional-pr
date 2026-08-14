@@ -1,0 +1,21 @@
+name: Do self test
+
+on:
+  pull_request_target:
+
+permissions: {}
+
+jobs:
+  cpr:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Test validation to self
+        uses: ./
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+          edit: true
+          verbose: true
