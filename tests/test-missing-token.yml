@@ -1,0 +1,31 @@
+name: Test missing access token error
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Run action without access_token (expect failure)
+        id: action
+        uses: .
+        with:
+          # access_token intentionally omitted to trigger config error
+          # The action reads INPUT_ACCESS_TOKEN; if empty it returns ErrMissingToken
+          # We pass an empty string explicitly
+          access_token: ""
+          issue: "false"
+          body: "false"
+        continue-on-error: true
+
+      - name: Assert action failed due to missing token
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          if [ "$OUTCOME" != "failure" ]; then
+            echo "FAIL: expected action to fail when access_token is empty, got: $OUTCOME"
+            exit 1
+          fi
+          echo "PASS: action correctly failed when access_token is missing"

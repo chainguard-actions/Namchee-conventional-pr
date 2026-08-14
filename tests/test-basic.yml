@@ -1,0 +1,36 @@
+name: Test basic usage - graceful exit on non-PR event
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Run action (expect graceful exit on non-PR event)
+        id: action
+        uses: .
+        with:
+          access_token: ${{ github.token }}
+          draft: "true"
+          strict: "true"
+          bot: "true"
+          issue: "false"
+          body: "false"
+          close: "false"
+          verbose: "false"
+        # The action reads GITHUB_EVENT_PATH which under workflow_dispatch
+        # contains no PR sub-event action, so it exits 0 with
+        # "Incompatible sub-events detected. Exiting..."
+        continue-on-error: true
+
+      - name: Assert action exited successfully (non-PR event is a no-op)
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          if [ "$OUTCOME" != "success" ]; then
+            echo "FAIL: expected action to succeed (exit 0) on non-PR event, got: $OUTCOME"
+            exit 1
+          fi
+          echo "PASS: action exited gracefully on non-PR event"

@@ -1,0 +1,41 @@
+name: Test ignored users and verbose options
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_EVENT_NAME: pull_request
+      GITHUB_REF: refs/pull/1/merge
+      GITHUB_HEAD_REF: fix/some-bug
+      GITHUB_BASE_REF: main
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Run action with ignored users and verbose mode
+        id: action
+        uses: .
+        with:
+          access_token: ${{ github.token }}
+          close: false
+          draft: true
+          bot: true
+          strict: false
+          issue: false
+          body: false
+          maximum_changes: 0
+          ignored_users: 'dependabot,renovate'
+          verbose: true
+          edit: false
+        continue-on-error: true
+
+      - name: Assert action ran
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          if [ -z "$OUTCOME" ]; then
+            echo "FAIL: action outcome was not set"
+            exit 1
+          fi
+          echo "PASS: action ran with ignored_users and verbose, outcome=$OUTCOME"

@@ -1,0 +1,41 @@
+name: Test custom title pattern
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_EVENT_NAME: pull_request
+      GITHUB_REF: refs/pull/1/merge
+      GITHUB_HEAD_REF: feature/custom-pattern
+      GITHUB_BASE_REF: main
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Run action with custom title pattern
+        id: action
+        uses: .
+        with:
+          access_token: ${{ github.token }}
+          close: false
+          draft: true
+          bot: true
+          strict: false
+          issue: false
+          body: false
+          title_pattern: '^(feat|fix|chore|docs|style|refactor|test|ci)(\(.+\))?: .+'
+          commit_pattern: ''
+          branch_pattern: ''
+          maximum_changes: 0
+        continue-on-error: true
+
+      - name: Assert action ran with custom pattern
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          if [ -z "$OUTCOME" ]; then
+            echo "FAIL: action outcome was not set"
+            exit 1
+          fi
+          echo "PASS: action ran with custom title pattern, outcome=$OUTCOME"

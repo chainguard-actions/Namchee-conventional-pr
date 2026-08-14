@@ -1,0 +1,44 @@
+name: Test custom configuration options
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Run action with custom configuration
+        id: action
+        uses: .
+        with:
+          access_token: ${{ github.token }}
+          # Non-default values for all optional inputs
+          draft: "false"
+          strict: "false"
+          bot: "false"
+          issue: "false"
+          body: "false"
+          close: "false"
+          label: ""
+          message: ""
+          maximum_changes: "10"
+          title_pattern: "^(feat|fix|chore|docs|style|refactor|test)(\\([\\w-]+\\))?: .+"
+          commit_pattern: ""
+          branch_pattern: "^(feature|bugfix|hotfix)/.+"
+          ignored_users: ""
+          edit: "false"
+          verbose: "false"
+        # Under workflow_dispatch, the event action won't match PR sub-events
+        # so the action exits 0 gracefully
+        continue-on-error: true
+
+      - name: Assert action exited successfully with custom config
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          if [ "$OUTCOME" != "success" ]; then
+            echo "FAIL: expected action to succeed (exit 0) with custom config on non-PR event, got: $OUTCOME"
+            exit 1
+          fi
+          echo "PASS: action accepted custom configuration and exited gracefully"
