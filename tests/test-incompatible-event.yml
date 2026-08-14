@@ -1,0 +1,27 @@
+name: Test incompatible event exits gracefully
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Run action with workflow_dispatch event (incompatible sub-event)
+        id: action
+        # The action reads GITHUB_EVENT_PATH; under workflow_dispatch the event
+        # JSON has no "action" field, so event.Action == "" which is not in the
+        # valid PR sub-events list. The action should exit 0 with
+        # "Incompatible sub-events detected. Exiting..."
+        uses: .
+        with:
+          access_token: ${{ github.token }}
+          # Disable checks that would require a real PR
+          issue: false
+          body: false
+          strict: false
+
+      - name: Assert action completed without error
+        run: |
+          echo "Action completed successfully (exit 0 for incompatible event)"
+          echo "PASS"

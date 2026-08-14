@@ -1,0 +1,20 @@
+name: Check PR semantics
+
+on:
+  pull_request_target:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  cpr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@a37ce9120846195fa4ece8f58b268e6043cb2f26 # v3
+      - name: Check PR semantics
+        uses: ./
+        with:
+          access_token: ${{ secrets.ACCESS_TOKEN }}
+          edit: true
+          verbose: true
