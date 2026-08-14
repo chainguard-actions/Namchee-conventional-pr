@@ -1,0 +1,25 @@
+name: Test incompatible event (workflow_dispatch exits cleanly)
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      # Under workflow_dispatch the event JSON has no PR "action" field matching
+      # ["opened","reopened","ready_for_review","synchronize","unlocked","edited"],
+      # so the action logs "Incompatible sub-events detected. Exiting..." and exits 0.
+      - id: action
+        uses: .
+        with:
+          access_token: ${{ github.token }}
+          # Disable features that would require a real PR
+          issue: false
+          body: false
+          strict: false
+
+      - name: Assert action exited successfully for incompatible event
+        run: |
+          echo "Action completed with exit code 0 (incompatible sub-event handled gracefully)"
+          echo "PASS"
