@@ -1,0 +1,41 @@
+name: Test branch and commit pattern configuration
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      # Set up a git origin reachable inside the Docker container
+      - name: Set up git origin reachable inside Docker container
+        run: |
+          git config user.email "test@example.com"
+          git config user.name "Test User"
+          rm -rf "$GITHUB_WORKSPACE/.git-remote"
+          git init --bare "$GITHUB_WORKSPACE/.git-remote"
+          git push "$GITHUB_WORKSPACE/.git-remote" HEAD:refs/heads/act-harness
+          git remote set-url origin "$GITHUB_WORKSPACE/.git-remote" 2>/dev/null || \
+            git remote add origin "$GITHUB_WORKSPACE/.git-remote"
+
+      # Test with branch_pattern and commit_pattern set. The action should
+      # accept valid regex patterns, initialize successfully, then exit 0
+      # because the workflow_dispatch event has no matching PR sub-event action.
+      - name: Run action with branch and commit patterns
+        id: action
+        uses: .
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+          branch_pattern: '^(feature|fix|hotfix|release)/.+'
+          commit_pattern: '^(feat|fix|docs|style|refactor|test|chore)(\(.+\))?: .+'
+          draft: false
+          strict: false
+          bot: false
+          issue: false
+          body: false
+          timeout: 5
+
+      - name: Assert action accepted branch and commit patterns and exited gracefully
+        run: |
+          echo "Action completed successfully with branch_pattern and commit_pattern"
+          echo "PASS: branch_pattern and commit_pattern were accepted and action exited gracefully"

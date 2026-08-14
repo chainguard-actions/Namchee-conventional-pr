@@ -1,0 +1,40 @@
+name: Test incompatible event exits gracefully
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      # Set up a git origin reachable inside the Docker container
+      - name: Set up git origin reachable inside Docker container
+        run: |
+          git config user.email "test@example.com"
+          git config user.name "Test User"
+          rm -rf "$GITHUB_WORKSPACE/.git-remote"
+          git init --bare "$GITHUB_WORKSPACE/.git-remote"
+          git push "$GITHUB_WORKSPACE/.git-remote" HEAD:refs/heads/act-harness
+          git remote set-url origin "$GITHUB_WORKSPACE/.git-remote" 2>/dev/null || \
+            git remote add origin "$GITHUB_WORKSPACE/.git-remote"
+
+      # The workflow_dispatch event file will have no "action" field matching
+      # the valid PR sub-events (opened, reopened, ready_for_review, synchronize,
+      # unlocked, edited). The action reads the event file and exits 0 when the
+      # sub-event is incompatible.
+      - name: Run action with incompatible event (workflow_dispatch)
+        id: action
+        uses: .
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+          draft: false
+          strict: false
+          bot: false
+          issue: false
+          body: false
+          timeout: 5
+
+      - name: Assert action exited successfully for incompatible event
+        run: |
+          echo "Action completed successfully (exit 0) for incompatible event"
+          echo "PASS: action gracefully handled non-PR event"
